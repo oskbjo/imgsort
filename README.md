@@ -6,8 +6,10 @@
 - [Usage](#usage)
 
 # imgsort
-Sort JPG and raw images to directories
+Sort JPG and RAW images to directories
 Assumes that images are stored on media device (USB stick), and that no other media is attached
+JPGs stored in `/home/$USER/Pictures/Photographs`
+RAWs stored in `/home/$USER/Pictures/Photographs RAW`
 Runs using bash, and Python 3.12
 
 # Quick Install
@@ -23,8 +25,12 @@ chmod u+w imgsort.sh # For execution, and write
 
 # Usage
 ```
-ch ~/imgsort
-imgsort.sh DIRECTORY_DESCRIPTION
+# NORMAL MODE
+cd ~/imgsort
+./imgsort.sh "DIRECTORY_DESCRIPTION"
+
+# FILTER MODE
+./imgsort.sh -v -d "DIRECTORY_NAME"
 ```
 
 I might update this if I feel the need. Please use as you see fit

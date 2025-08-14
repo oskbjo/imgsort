@@ -28,7 +28,8 @@ def CreateDirs(local_path, mod_date, raw_ext="", desc=""):
 def ExtractDate(file_path):
     mod_time = os.path.getmtime(file_path)
     mod_dt = datetime.fromtimestamp(mod_time)
-    mod_date = mod_dt.strftime("%Y") + "-" + mod_dt.strftime("%m") + "-" + mod_dt.strftime("%d")
+    mod_date = mod_dt.strftime("%Y") + "-" + mod_dt.strftime("%m") +\
+        "-" + mod_dt.strftime("%d")
     return mod_date
 
 def MoveFiles(img_files_dir, local_img_dir, local_raw_img_dir, img_files):
@@ -80,10 +81,16 @@ def main():
         mod_dict.get(mod_date).append(img_file)
 
     for mod_date in mod_dates:
-        local_img_dir, local_raw_img_dir = CreateDirs(args.local_photos_path, mod_date, args.raw_dir_ext, args.dir_description)
-        MoveFiles(img_files_dir, local_img_dir, local_raw_img_dir, mod_dict.get(mod_date))
-    print(f"All files moved successfully")
-
+        local_img_dir, local_raw_img_dir = CreateDirs(
+            args.local_photos_path,
+            mod_date,
+            args.raw_dir_ext,
+            args.dir_description)
+        MoveFiles(
+            img_files_dir,
+            local_img_dir,
+            local_raw_img_dir,
+            mod_dict.get(mod_date))
 
 if __name__=="__main__":
     main()

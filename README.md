@@ -15,7 +15,7 @@ Runs using bash, and Python 3.12
 # Quick Install
 ```sh
 # Clone repo with
-git clone git@github.com:oskbjo/imgsort.git
+git clone https://github.com/oskbjo/imgsort.git
 
 # Allow access to shell script
 cd imgsort

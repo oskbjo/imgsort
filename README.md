@@ -21,13 +21,17 @@ git clone https://github.com/oskbjo/imgsort.git
 cd imgsort
 # chmod u+x imgsort.sh # For execution, no write
 chmod u+w imgsort.sh # For execution, and write
+
+# Enable git hooks
+git config core.hooksPath .githooks
 ```
 
 # Usage
 ```
 # NORMAL MODE
 cd ~/imgsort
-./imgsort.sh "DIRECTORY_DESCRIPTION"
+./imgsort.sh
+# Enter one directory description per detected date when prompted.
 
 # FILTER MODE
 ./imgsort.sh -v -d "DIRECTORY_NAME"

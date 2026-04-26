@@ -44,7 +44,7 @@ if [ $verbose_mode == false ]; then
   done
 
   python3 imgsort.py --img_files_dir "$img_files_dir" --local_photos_path\
-   $local_photos_path --raw_dir_ext $raw_dir_ext --dir_description $dir_name
+   "$local_photos_path" --raw_dir_ext "$raw_dir_ext"
   echo "All files moved successfully"
 
 # Verbose mode. Filter RAW files

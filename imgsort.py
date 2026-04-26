@@ -5,14 +5,18 @@ import shutil
 from datetime import datetime
 
 
-def CreateDirs(local_path, mod_date, raw_ext="", desc=""):
+def CreateDirs(
+    local_path: str, mod_date: str, raw_ext: str = "", desc: str = ""
+) -> tuple[str, str]:
     local_img_dir = ""
     local_raw_img_dir = ""
+    temp = [""]
     if raw_ext != "":
-        temp = ["", " " + raw_ext]
+        temp.append(" " + raw_ext)
 
     for i in temp:
-        path = "~/" + local_path + i + "/" + mod_date + " " + desc
+        dir_name = mod_date if desc == "" else mod_date + " " + desc
+        path = "~/" + local_path + i + "/" + dir_name
         full_path = os.path.expanduser(path)
         if not os.path.exists(full_path):
             os.makedirs(full_path)
@@ -25,24 +29,38 @@ def CreateDirs(local_path, mod_date, raw_ext="", desc=""):
             local_raw_img_dir = full_path
     return local_img_dir, local_raw_img_dir
 
-def ExtractDate(file_path):
+
+def ExtractDate(file_path: str) -> str:
     mod_time = os.path.getmtime(file_path)
     mod_dt = datetime.fromtimestamp(mod_time)
-    mod_date = mod_dt.strftime("%Y") + "-" + mod_dt.strftime("%m") +\
-        "-" + mod_dt.strftime("%d")
+    mod_date = (
+        mod_dt.strftime("%Y")
+        + "-"
+        + mod_dt.strftime("%m")
+        + "-"
+        + mod_dt.strftime("%d")
+    )
     return mod_date
 
-def MoveFiles(img_files_dir, local_img_dir, local_raw_img_dir, img_files):
-    jpg_files = [f for f in img_files if re.search(r'\.jpg$', f, re.IGNORECASE)]
-    raw_files = [f for f in img_files if re.search(r'\.orf$', f, re.IGNORECASE)]
+
+def MoveFiles(
+    img_files_dir: str, local_img_dir: str, local_raw_img_dir: str, img_files: str
+) -> None:
+    jpg_files = [f for f in img_files if re.search(r"\.jpg$", f, re.IGNORECASE)]
+    raw_files = [f for f in img_files if re.search(r"\.orf$", f, re.IGNORECASE)]
     for i in range(len(jpg_files)):
         shutil.move(img_files_dir + jpg_files[i], local_img_dir)
         shutil.move(img_files_dir + raw_files[i], local_raw_img_dir)
 
-def main():
-    parser = argparse.ArgumentParser(
-        description=""
-    )
+
+def PromptDirDescription(mod_date: str) -> str:
+    while True:
+        desc = input(f"Enter directory description for {mod_date}: ").strip()
+        return desc
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="")
     parser.add_argument(
         "--img_files_dir",
         type=str,
@@ -52,27 +70,21 @@ def main():
         "--local_photos_path",
         type=str,
         default="Pictures/Photographs",
-        help="Path to local photos dir from home dir"
+        help="Path to local photos dir from home dir",
     )
     parser.add_argument(
         "--raw_dir_ext",
         type=str,
         default="",
-        help="Optional extension for separate raw photos dir"
-    )
-    parser.add_argument(
-        "--dir_description",
-        type=str,
-        default="",
-        help="Description of photos dir to be part of dir name"
+        help="Optional extension for separate raw photos dir",
     )
     args = parser.parse_args()
-    
-    img_files_dir = args.img_files_dir + "/"
+
+    img_files_dir: str = args.img_files_dir + "/"
     img_files = os.listdir(img_files_dir)
 
-    mod_dates = set()
-    mod_dict = {}
+    mod_dates: set[str] = set()
+    mod_dict: dict[str, list[str]] = {}
     for img_file in img_files:
         mod_date = ExtractDate(img_files_dir + img_file)[2:]
         mod_dates.add(mod_date)
@@ -80,17 +92,15 @@ def main():
             mod_dict.update({mod_date: []})
         mod_dict.get(mod_date).append(img_file)
 
-    for mod_date in mod_dates:
+    for mod_date in sorted(mod_dates):
+        dir_description = PromptDirDescription(mod_date)
         local_img_dir, local_raw_img_dir = CreateDirs(
-            args.local_photos_path,
-            mod_date,
-            args.raw_dir_ext,
-            args.dir_description)
+            args.local_photos_path, mod_date, args.raw_dir_ext, dir_description
+        )
         MoveFiles(
-            img_files_dir,
-            local_img_dir,
-            local_raw_img_dir,
-            mod_dict.get(mod_date))
+            img_files_dir, local_img_dir, local_raw_img_dir, mod_dict.get(mod_date)
+        )
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()

@@ -43,7 +43,7 @@ if [ $verbose_mode == false ]; then
     [ -f "${f%.ORF}.JPG" ] || [ -f "${f%.ORF}.jpg" ] || rm "$f"
   done
 
-  python3 imgsort.py --img_files_dir "$img_files_dir" --local_photos_path\
+  python3 projects/imgsort/imgsort.py --img_files_dir "$img_files_dir" --local_photos_path\
    "$local_photos_path" --raw_dir_ext "$raw_dir_ext"
   echo "All files moved successfully"
 
